@@ -3,6 +3,8 @@ var controller = function($scope, $interval, $log){
     var new_paddle_y;
     var ball_direction = 1
     var game_over = false
+    var SCREEN_WIDTH = 600
+    var SCREEN_HEIGHT = 600
 
     function Sprite(x,y,w,h){
         this.x = x
@@ -21,7 +23,7 @@ var controller = function($scope, $interval, $log){
         paddle_top = paddle.y
         paddle_bottom = paddle.y + paddle.height
 
-        if(ball_right_edge === 800){
+        if(ball_right_edge === SCREEN_WIDTH){
             return true
         }
         if(ball_left_edge === paddle_right_edge && ball.y >= paddle_top && ball.y <= paddle_bottom){
@@ -50,7 +52,7 @@ var controller = function($scope, $interval, $log){
 
     var game_render = function(){
         // wipe slate
-        cxt.clearRect(0, 0, 800, 800)
+        cxt.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 
         // paddle render
         cxt.fillRect(paddle.x, paddle.y, paddle.width, paddle.height)
