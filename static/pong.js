@@ -1,7 +1,8 @@
 var controller = function($scope, $interval, $log){
     var cxt = document.getElementById("canv").getContext("2d")
     var new_paddle_y;
-    var ball_direction = 1
+    var ball_x_direction = 1
+    var ball_y_direction = 0
     var game_over = false
     var SCREEN_WIDTH = 600
     var SCREEN_HEIGHT = 600
@@ -35,18 +36,77 @@ var controller = function($scope, $interval, $log){
     }
 
     var game_logic = function(){
+        // convenience variables for clearing up logic
+        ball_right_edge = ball.x + ball.width
+        ball_left_edge = ball.x
+        ball_top_edge = ball.y
+        ball_bottom_edge = ball.y + ball.height
+        paddle_right_edge = paddle.x + paddle.width
+        paddle_top = paddle.y
+        paddle_bottom = paddle.y + paddle.height
+
+        /* boolean condition checkers */
+        var is_ball_collide_with_top_wall = function(){
+            return ball_top_edge === 0
+        }
+        var is_ball_collide_with_bottom_wall = function(){
+            return ball_bottom_edge === SCREEN_HEIGHT
+        }
+        var is_ball_collide_with_back_wall = function(){
+            return ball_right_edge === SCREEN_WIDTH
+        }
+        var is_ball_collide_with_paddle = function(){
+            return paddle_right_edge === ball_left_edge && ball_bottom_edge >= paddle_top && ball_top_edge <= paddle_bottom
+        }
+
+        /* actions */
+        var bounce_off_top_wall = function(){
+            ball_y_direction = 1
+        }
+
+        var bounce_off_bottom_wall = function(){
+            ball_y_direction = -1
+        }
+
+        var bounce_off_back_wall = function(){
+            ball_x_direction = -1
+        }
+
+        var bounce_off_paddle = function(){
+            ball_x_direction = 1
+            paddle_center = paddle.y + (paddle.height / 2)
+            if(ball.y > paddle_center){
+                ball_y_direction = 1
+            }
+            else{
+                ball_y_direction = -1
+            }
+        }
+
 
         if(game_over === false){
-            if(bounce_detected()){
-                ball_direction = -ball_direction
+            if(is_ball_collide_with_top_wall()){
+                bounce_off_top_wall()
             }
 
-            if(ball.x < paddle.x){
+            else if(is_ball_collide_with_bottom_wall()){
+                bounce_off_bottom_wall()
+            }
+            else if(is_ball_collide_with_back_wall()){
+                bounce_off_back_wall()
+            }
+
+            else if(is_ball_collide_with_paddle()){
+                bounce_off_paddle()
+            }
+
+            else if(ball.x < paddle.x){
                 game_over = true
             }
 
             paddle.y = new_paddle_y
-            ball.x += ball_direction
+            ball.x += ball_x_direction
+            ball.y += ball_y_direction
         }
     }
 
