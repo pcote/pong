@@ -1,4 +1,4 @@
-var controller = function($scope, $interval, $log){
+(function(){
     var cxt = document.getElementById("canv").getContext("2d")
     var new_paddle_y;
     var ball_x_direction = 1
@@ -126,12 +126,11 @@ var controller = function($scope, $interval, $log){
         game_render()
     }
 
-    $interval(game_cycle, 4)
+    setInterval(game_cycle, 4)
 
-    $scope.mouse_action = function(evt){
+    mouse_action = function(evt){
         new_paddle_y = evt.pageY
     }
-}
 
-var app = angular.module("app", [])
-app.controller("controller", controller)
+    window.onmousemove = mouse_action
+}())
