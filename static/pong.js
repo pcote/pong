@@ -6,6 +6,7 @@ $(function(){
     var game_over = false
     var SCREEN_WIDTH = 600
     var SCREEN_HEIGHT = 600
+    var bounce_sound = $("#bounce_sound")[0]
 
     function Sprite(x,y,w,h){
         this.x = x
@@ -62,14 +63,17 @@ $(function(){
         /* actions */
         var bounce_off_top_wall = function(){
             ball_y_direction = 1
+            bounce_sound.play()
         }
 
         var bounce_off_bottom_wall = function(){
             ball_y_direction = -1
+            bounce_sound.play()
         }
 
         var bounce_off_back_wall = function(){
             ball_x_direction = -1
+            bounce_sound.play()
         }
 
         var bounce_off_paddle = function(){
@@ -81,6 +85,8 @@ $(function(){
             else{
                 ball_y_direction = -1
             }
+
+            bounce_sound.play()
         }
 
 
